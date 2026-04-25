@@ -1,0 +1,42 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "p",
+      "camelcase": "P",
+      "title": "P",
+      "scope": "source.p",
+      "file-types": [
+        "p"
+      ],
+      "injection-regex": "^p$",
+      "class-name": "TreeSitterP"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Tree Sitter grammar for P programming langugage",
+    "authors": [
+      {
+        "name": "Ben Cornia",
+        "email": "ben.cornia@gmail.com",
+        "url": "bencornia.com"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/bencornia/tree-sitter-p.git",
+      "funding": ""
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "java": false,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
