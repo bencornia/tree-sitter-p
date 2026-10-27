@@ -370,6 +370,10 @@
         "named": true
       },
       {
+        "type": "scenario_machine_declaration",
+        "named": true
+      },
+      {
         "type": "spec_machine_declaration",
         "named": true
       },
@@ -612,7 +616,7 @@
     "named": true,
     "fields": {
       "lhs": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
@@ -693,7 +697,7 @@
       },
       "rhs": {
         "multiple": false,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "expression",
@@ -2981,6 +2985,36 @@
     }
   },
   {
+    "type": "scenario_machine_declaration",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "event_set_literal",
+          "named": true
+        },
+        {
+          "type": "machine_body",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "send_statement",
     "named": true,
     "fields": {},
@@ -3771,6 +3805,10 @@
     "named": false
   },
   {
+    "type": "Proof",
+    "named": false
+  },
+  {
     "type": "Theorem",
     "named": false
   },
@@ -3904,10 +3942,6 @@
     "named": false
   },
   {
-    "type": "flying",
-    "named": false
-  },
-  {
     "type": "forall",
     "named": false
   },
@@ -3961,6 +3995,10 @@
   },
   {
     "type": "in",
+    "named": false
+  },
+  {
+    "type": "inflight",
     "named": false
   },
   {
@@ -4036,10 +4074,6 @@
     "named": false
   },
   {
-    "type": "proof",
-    "named": false
-  },
-  {
     "type": "prove",
     "named": false
   },
@@ -4073,6 +4107,10 @@
   },
   {
     "type": "return",
+    "named": false
+  },
+  {
+    "type": "scenario",
     "named": false
   },
   {

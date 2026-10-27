@@ -396,6 +396,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "scenario_machine_declaration"
+        },
+        {
+          "type": "SYMBOL",
           "name": "function_declaration"
         },
         {
@@ -893,6 +897,35 @@
         }
       ]
     },
+    "scenario_machine_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "scenario"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "observes"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "event_set_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "machine_body"
+        }
+      ]
+    },
     "function_declaration": {
       "type": "CHOICE",
       "members": [
@@ -1111,10 +1144,6 @@
                   }
                 ]
               }
-            },
-            {
-              "type": "STRING",
-              "value": ";"
             }
           ]
         }
@@ -1711,7 +1740,7 @@
       "members": [
         {
           "type": "STRING",
-          "value": "proof"
+          "value": "Proof"
         },
         {
           "type": "CHOICE",
@@ -3769,38 +3798,46 @@
       }
     },
     "flying_expression": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "flying"
-        },
-        {
-          "type": "FIELD",
-          "name": "instance",
-          "content": {
-            "type": "SYMBOL",
-            "name": "expression"
+      "type": "PREC_LEFT",
+      "value": 12,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "inflight"
+          },
+          {
+            "type": "FIELD",
+            "name": "instance",
+            "content": {
+              "type": "SYMBOL",
+              "name": "expression"
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "sent_expression": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "sent"
-        },
-        {
-          "type": "FIELD",
-          "name": "instance",
-          "content": {
-            "type": "SYMBOL",
-            "name": "expression"
+      "type": "PREC_LEFT",
+      "value": 12,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "sent"
+          },
+          {
+            "type": "FIELD",
+            "name": "instance",
+            "content": {
+              "type": "SYMBOL",
+              "name": "expression"
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "seq_access_expression": {
       "type": "PREC_LEFT",
@@ -4180,7 +4217,7 @@
               },
               {
                 "type": "FIELD",
-                "name": "lhs",
+                "name": "rhs",
                 "content": {
                   "type": "SYMBOL",
                   "name": "expression"
@@ -5536,6 +5573,10 @@
       },
       {
         "type": "STRING",
+        "value": "inflight"
+      },
+      {
+        "type": "STRING",
         "value": "init-condition"
       },
       {
@@ -5588,6 +5629,10 @@
       },
       {
         "type": "STRING",
+        "value": "Proof"
+      },
+      {
+        "type": "STRING",
         "value": "prove"
       },
       {
@@ -5621,6 +5666,10 @@
       {
         "type": "STRING",
         "value": "return"
+      },
+      {
+        "type": "STRING",
+        "value": "scenario"
       },
       {
         "type": "STRING",

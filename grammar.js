@@ -63,7 +63,7 @@ export default grammar({
             'ignore',
             'implementation',
             'in',
-            // 'inflight',
+            'inflight',
             'init-condition',
             'invariant',
             'is',
@@ -78,7 +78,7 @@ export default grammar({
             'param',
             // 'paramtest',
             'print',
-            // 'Proof',
+            'Proof',
             'prove',
             'pure',
             'raise',
@@ -89,6 +89,7 @@ export default grammar({
             'requires',
             'return',
             // 'safe',
+            'scenario',
             'send',
             'sends',
             'sent',
@@ -196,6 +197,7 @@ export default grammar({
                 $.interface_declaration,
                 $.impl_machine_declaration,
                 $.spec_machine_declaration,
+                $.scenario_machine_declaration,
                 $.function_declaration,
                 $.pure_declaration,
                 $.named_module_declaration,
@@ -303,6 +305,15 @@ export default grammar({
                 $.machine_body,
             ),
 
+        scenario_machine_declaration: ($) =>
+            seq(
+                'scenario',
+                field('name', $.identifier),
+                'observes',
+                $.event_set_literal,
+                $.machine_body,
+            ),
+
         function_declaration: ($) =>
             choice($.foreign_function_declaration, $.p_function_declaration),
 
@@ -329,7 +340,6 @@ export default grammar({
                         seq('requires', field('requires', $.expression), ';'),
                     ),
                     repeat(seq('ensures', field('ensures', $.expression), ';')),
-                    ';',
                 ),
             ),
 
@@ -452,7 +462,7 @@ export default grammar({
 
         proof_block_declaration: ($) =>
             seq(
-                'proof',
+                'Proof',
                 optional(field('name', $.identifier)),
                 '{',
                 optional($.proof_body),
@@ -837,9 +847,10 @@ export default grammar({
             ),
 
         flying_expression: ($) =>
-            seq('flying', field('instance', $.expression)),
+            prec.left(12, seq('inflight', field('instance', $.expression))),
 
-        sent_expression: ($) => seq('sent', field('instance', $.expression)),
+        sent_expression: ($) =>
+            prec.left(12, seq('sent', field('instance', $.expression))),
 
         seq_access_expression: ($) =>
             prec.left(
@@ -906,7 +917,7 @@ export default grammar({
                     seq(
                         field('lhs', $.expression),
                         field('op', choice('<', '>', '>=', '<=', 'in')),
-                        field('lhs', $.expression),
+                        field('rhs', $.expression),
                     ),
                 ),
                 prec.left(

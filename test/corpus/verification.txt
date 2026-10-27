@@ -1,0 +1,126 @@
+================================================================================
+Scenario machine
+================================================================================
+
+scenario ReadAfterWrite observes eWrite, eRead {
+  start hot state WaitWrite {
+    on eWrite goto Done;
+  }
+  cold state Done { }
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (scenario_machine_declaration
+    name: (identifier)
+    (event_set_literal
+      events: (non_default_event
+        (identifier))
+      events: (non_default_event
+        (identifier)))
+    (machine_body
+      (machine_entry
+        (state_declaration
+          name: (identifier)
+          (on_event_goto_state
+            (event_list
+              (event_id
+                (identifier)))
+            (state_name
+              state: (identifier)))))
+      (machine_entry
+        (state_declaration
+          name: (identifier))))))
+
+================================================================================
+Foreign function with return and ensures has no trailing semicolon
+================================================================================
+
+fun Pick(s: set[machine])
+    return (x: machine);
+    ensures x in s;
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    (foreign_function_declaration
+      name: (identifier)
+      (function_param_list
+        (function_param
+          name: (identifier)
+          (set_type)))
+      (function_param
+        name: (identifier))
+      ensures: (bin_expression
+        lhs: (identifier)
+        rhs: (identifier)))))
+
+================================================================================
+inflight binds tighter than binary operators
+================================================================================
+
+invariant only_head: forall (e: event) :: inflight e ==> e is eWrite;
+
+--------------------------------------------------------------------------------
+
+(program
+  (invariant_declaration
+    name: (identifier)
+    (quant_expression
+      bound: (function_param_list
+        (function_param
+          name: (identifier)))
+      body: (bin_expression
+        lhs: (flying_expression
+          instance: (identifier))
+        rhs: (test_expression
+          instance: (identifier)
+          kind: (identifier))))))
+
+================================================================================
+inflight, sent, targets, and indexing precedence
+================================================================================
+
+invariant i: forall (e: event, m: machine) :: (inflight e && e targets m) ==> sent e[0];
+
+--------------------------------------------------------------------------------
+
+(program
+  (invariant_declaration
+    name: (identifier)
+    (quant_expression
+      bound: (function_param_list
+        (function_param
+          name: (identifier))
+        (function_param
+          name: (identifier)))
+      body: (bin_expression
+        lhs: (paren_expression
+          (bin_expression
+            lhs: (flying_expression
+              instance: (identifier))
+            rhs: (targets_expression
+              instance: (identifier)
+              target: (identifier))))
+        rhs: (seq_access_expression
+          seq: (sent_expression
+            instance: (identifier))
+          index: (int_literal))))))
+
+================================================================================
+Proof block
+================================================================================
+
+Proof {
+  prove only_head;
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (proof_block_declaration
+    (proof_body
+      (proof_item
+        targets: (identifier)))))

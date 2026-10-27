@@ -14,6 +14,7 @@
     "seq"
     "set"
     "spec"
+    "scenario"
     "halt"
     "any"
     "module"
