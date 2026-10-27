@@ -297,3 +297,40 @@ fun Reset() {
             (keyword_expression
               (named_type
                 (identifier)))))))))
+
+================================================================================
+Function call statements end with a semicolon
+================================================================================
+
+fun F() {
+  G(1);
+  G();
+}
+
+---
+
+(program
+  (function_declaration
+    (p_function_declaration
+      (identifier)
+      (function_body
+        (function_call_statement
+          (identifier)
+          (rvalue_list
+            (rvalue
+              (int_literal))))
+        (function_call_statement
+          (identifier))))))
+
+================================================================================
+A function call statement without a semicolon is an error
+:error
+================================================================================
+
+fun F() {
+  G(1)
+}
+
+---
+
+

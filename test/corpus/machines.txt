@@ -73,7 +73,6 @@ machine CoffeeMakerControlPanel
                         (rvalue)))))
                 (function_call_statement
                   (identifier))
-                (no_statement)
                 (goto_statement
                   (state_name
                     (identifier))))))))
@@ -134,8 +133,7 @@ machine CoffeeMakerControlPanel
                 (announce_statement
                   (identifier))
                 (function_call_statement
-                  (identifier))
-                (no_statement))))
+                  (identifier)))))
           (on_event_goto_state
             (event_list
               (event_id
@@ -304,8 +302,7 @@ machine FailureDetector {
                           (rvalue)
                           (identifier)
                           (rvalue
-                            (identifier)))))))
-                (no_statement))))
+                            (identifier))))))))))
           (on_event_do_action_with_anon
             (event_list
               (event_id

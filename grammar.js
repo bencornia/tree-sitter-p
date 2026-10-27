@@ -719,7 +719,7 @@ export default grammar({
             seq('new', $.identifier, '(', optional($.rvalue_list), ')', ';'),
 
         function_call_statement: ($) =>
-            seq($.identifier, '(', optional($.rvalue_list), ')'),
+            seq($.identifier, '(', optional($.rvalue_list), ')', ';'),
 
         raise_statement: ($) =>
             seq('raise', $.expression, optional(seq(',', $.rvalue_list)), ';'),
