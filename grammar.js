@@ -745,8 +745,11 @@ export default grammar({
         goto_statement: ($) =>
             seq('goto', $.state_name, optional(seq(',', $.rvalue_list)), ';'),
 
+        // P requires at least one case. Allowing none keeps `receive {}`
+        // from being a syntax error while the first case is typed, so
+        // editors can indent it; p-lsp reports the missing case.
         receive_statement: ($) =>
-            seq('receive', '{', repeat1($.recv_case), '}'),
+            seq('receive', '{', repeat($.recv_case), '}'),
 
         no_statement: ($) => ';',
 

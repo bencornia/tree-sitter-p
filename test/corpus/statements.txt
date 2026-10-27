@@ -334,3 +334,21 @@ fun F() {
 ---
 
 
+
+================================================================================
+Receive with no cases yet parses, so editors can indent the first one
+================================================================================
+
+fun F() {
+  receive {
+  }
+}
+
+---
+
+(program
+  (function_declaration
+    (p_function_declaration
+      (identifier)
+      (function_body
+        (receive_statement)))))
