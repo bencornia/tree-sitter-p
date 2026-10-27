@@ -1770,6 +1770,10 @@
       "required": true,
       "types": [
         {
+          "type": "expression",
+          "named": true
+        },
+        {
           "type": "type",
           "named": true
         }

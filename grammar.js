@@ -212,7 +212,7 @@ export default grammar({
         type_def_declaration: ($) => choice($.foreign_type_def, $.p_type_def),
 
         foreign_type_def: ($) =>
-            seq('type', '=', field('name', $.identifier), ';'),
+            seq('type', field('name', $.identifier), ';'),
 
         p_type_def: ($) =>
             seq('type', field('name', $.identifier), '=', $.type, ';'),
@@ -854,9 +854,9 @@ export default grammar({
 
         keyword_expression: ($) =>
             choice(
-                seq(field('fun', 'keys'), '(', $.type, ')'),
-                seq(field('fun', 'values'), '(', $.type, ')'),
-                seq(field('fun', 'sizeof'), '(', $.type, ')'),
+                seq(field('fun', 'keys'), '(', $.expression, ')'),
+                seq(field('fun', 'values'), '(', $.expression, ')'),
+                seq(field('fun', 'sizeof'), '(', $.expression, ')'),
                 seq(field('fun', 'default'), '(', $.type, ')'),
             ),
 
@@ -1054,7 +1054,7 @@ export default grammar({
                 seq(
                     field('op', 'compose'),
                     field('mexprs', $.module_expression),
-                    repeat1(seq(field('mexprs', $.module_expression))),
+                    repeat1(seq(',', field('mexprs', $.module_expression))),
                 ),
             ),
 

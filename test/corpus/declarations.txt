@@ -1,0 +1,76 @@
+================================================================================
+Foreign type declaration
+================================================================================
+
+type tPriorityQueue;
+
+--------------------------------------------------------------------------------
+
+(program
+  (type_def_declaration
+    (foreign_type_def
+      name: (identifier))))
+
+================================================================================
+Keyword expressions take expressions, except default
+================================================================================
+
+fun F(m: map[int, int]) {
+  x = sizeof(keys(m));
+  y = values(m);
+  z = default(int);
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    (p_function_declaration
+      name: (identifier)
+      (function_param_list
+        (function_param
+          name: (identifier)
+          (map_type)))
+      (function_body
+        (assign_statement
+          (lvalue
+            (var_lvalue
+              (identifier)))
+          (rvalue
+            (keyword_expression
+              (keyword_expression
+                (identifier)))))
+        (assign_statement
+          (lvalue
+            (var_lvalue
+              (identifier)))
+          (rvalue
+            (keyword_expression
+              (identifier))))
+        (assign_statement
+          (lvalue
+            (var_lvalue
+              (identifier)))
+          (rvalue
+            (keyword_expression)))))))
+
+================================================================================
+Compose module expression separates modules with commas
+================================================================================
+
+implementation Impl[main = Main]: (compose A, B, C);
+
+--------------------------------------------------------------------------------
+
+(program
+  (implementation_declaration
+    impl_name: (identifier)
+    main_machine: (identifier)
+    (paren_module_expression
+      (compose_module_expression
+        mexprs: (named_module
+          (identifier))
+        mexprs: (named_module
+          (identifier))
+        mexprs: (named_module
+          (identifier))))))
