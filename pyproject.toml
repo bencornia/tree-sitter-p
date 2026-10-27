@@ -19,7 +19,7 @@ license.text = "MIT"
 readme = "README.md"
 
 [project.urls]
-Homepage = "https://github.com/bencornia/tree-sitter-p.git"
+Homepage = "https://github.com/bencornia/tree-sitter-p"
 Funding = ""
 
 [project.optional-dependencies]

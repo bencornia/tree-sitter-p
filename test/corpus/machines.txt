@@ -1,0 +1,464 @@
+================================================================================
+Machine with variables, a blocking receive, and a named function
+================================================================================
+
+// From Tutorial/3_EspressoMachine/PSrc/CoffeeMakerControlPanel.p
+machine CoffeeMakerControlPanel
+{
+  var coffeeMaker: EspressoCoffeeMaker;
+  var coffeeMakerState: tCoffeeMakerState;
+  var currentUser: machine;
+
+  start state Init {
+    entry {
+      coffeeMakerState = NotWarmedUp;
+      coffeeMaker = new EspressoCoffeeMaker(this);
+      WaitForUser();
+      goto WarmUpCoffeeMaker;
+    }
+  }
+
+  fun WaitForUser() {
+      receive {
+          case eCoffeeMachineUser: (user: machine) {
+              currentUser = user;
+          }
+      }
+  }
+}
+
+---
+
+(program
+  (comment)
+  (impl_machine_declaration
+    (identifier)
+    (machine_body
+      (machine_entry
+        (var_declaration
+          (identifier_list
+            (identifier))
+          (named_type
+            (identifier))))
+      (machine_entry
+        (var_declaration
+          (identifier_list
+            (identifier))
+          (named_type
+            (identifier))))
+      (machine_entry
+        (var_declaration
+          (identifier_list
+            (identifier))))
+      (machine_entry
+        (state_declaration
+          (identifier)
+          (state_entry_anon
+            (anon_event_handler
+              (function_body
+                (assign_statement
+                  (lvalue
+                    (var_lvalue
+                      (identifier)))
+                  (rvalue
+                    (identifier)))
+                (assign_statement
+                  (lvalue
+                    (var_lvalue
+                      (identifier)))
+                  (rvalue
+                    (ctor_expression
+                      (identifier)
+                      (rvalue_list
+                        (rvalue)))))
+                (function_call_statement
+                  (identifier))
+                (no_statement)
+                (goto_statement
+                  (state_name
+                    (identifier))))))))
+      (machine_entry
+        (function_declaration
+          (p_function_declaration
+            (identifier)
+            (function_body
+              (receive_statement
+                (recv_case
+                  (event_list
+                    (event_id
+                      (identifier)))
+                  (anon_event_handler
+                    (function_param
+                      (identifier))
+                    (function_body
+                      (assign_statement
+                        (lvalue
+                          (var_lvalue
+                            (identifier)))
+                        (rvalue
+                          (identifier))))))))))))))
+
+================================================================================
+State with announce, goto on an event, defer, and ignore
+================================================================================
+
+// From Tutorial/3_EspressoMachine/PSrc/CoffeeMakerControlPanel.p
+machine CoffeeMakerControlPanel
+{
+  state WarmUpCoffeeMaker {
+    entry {
+      announce eInWarmUpState;
+      BeginHeatingCoffeeMaker();
+    }
+
+    on eWarmUpCompleted goto CoffeeMakerReady;
+
+    defer eOpenGroundsDoor, eCloseGroundsDoor;
+    ignore eEspressoButtonPressed, eSteamerButtonOff, eSteamerButtonOn, eResetCoffeeMaker;
+  }
+}
+
+---
+
+(program
+  (comment)
+  (impl_machine_declaration
+    (identifier)
+    (machine_body
+      (machine_entry
+        (state_declaration
+          (identifier)
+          (state_entry_anon
+            (anon_event_handler
+              (function_body
+                (announce_statement
+                  (identifier))
+                (function_call_statement
+                  (identifier))
+                (no_statement))))
+          (on_event_goto_state
+            (event_list
+              (event_id
+                (identifier)))
+            (state_name
+              (identifier)))
+          (state_defer
+            (non_default_event_list
+              (non_default_event
+                (identifier))
+              (non_default_event
+                (identifier))))
+          (state_ignore
+            (non_default_event_list
+              (non_default_event
+                (identifier))
+              (non_default_event
+                (identifier))
+              (non_default_event
+                (identifier))
+              (non_default_event
+                (identifier)))))))))
+
+================================================================================
+Entry with a tuple payload, raise halt, and handlers with and without payloads
+================================================================================
+
+// From Tutorial/4_FailureDetector/PSrc/FailureDetector.p
+machine FailureDetector {
+  var nodes: set[Node];
+  var alive: set[Node];
+  var respInCurrRound: set[machine];
+
+  start state Init {
+    entry (config: (nodes: set[Node], clients: set[Client])) {
+      nodes = config.nodes;
+      alive = config.nodes;
+      goto SendPingsToAllNodes;
+    }
+  }
+
+  state SendPingsToAllNodes {
+    entry {
+      var notRespondedNodes: set[Node];
+
+      if(sizeof(alive) == 0)
+        raise halt;
+
+      notRespondedNodes = PotentiallyDownNodes();
+      UnReliableBroadCast(notRespondedNodes, ePing, (fd =  this, trial = attempts));
+    }
+
+    on ePong do (pong: (node: Node, trial: int)) {
+      if (pong.node in alive) {
+        respInCurrRound += (pong.node);
+      }
+    }
+
+    on eTimeOut do {
+      attempts = attempts + 1;
+    }
+  }
+}
+
+---
+
+(program
+  (comment)
+  (impl_machine_declaration
+    (identifier)
+    (machine_body
+      (machine_entry
+        (var_declaration
+          (identifier_list
+            (identifier))
+          (set_type
+            (named_type
+              (identifier)))))
+      (machine_entry
+        (var_declaration
+          (identifier_list
+            (identifier))
+          (set_type
+            (named_type
+              (identifier)))))
+      (machine_entry
+        (var_declaration
+          (identifier_list
+            (identifier))
+          (set_type)))
+      (machine_entry
+        (state_declaration
+          (identifier)
+          (state_entry_anon
+            (anon_event_handler
+              (function_param
+                (identifier)
+                (named_tuple_type
+                  (identifier_type_list
+                    (identifier_type
+                      (identifier)
+                      (set_type
+                        (named_type
+                          (identifier))))
+                    (identifier_type
+                      (identifier)
+                      (set_type
+                        (named_type
+                          (identifier)))))))
+              (function_body
+                (assign_statement
+                  (lvalue
+                    (var_lvalue
+                      (identifier)))
+                  (rvalue
+                    (named_tuple_access_expression
+                      (identifier)
+                      (identifier))))
+                (assign_statement
+                  (lvalue
+                    (var_lvalue
+                      (identifier)))
+                  (rvalue
+                    (named_tuple_access_expression
+                      (identifier)
+                      (identifier))))
+                (goto_statement
+                  (state_name
+                    (identifier))))))))
+      (machine_entry
+        (state_declaration
+          (identifier)
+          (state_entry_anon
+            (anon_event_handler
+              (function_body
+                (var_declaration
+                  (identifier_list
+                    (identifier))
+                  (set_type
+                    (named_type
+                      (identifier))))
+                (if_statement
+                  (bin_expression
+                    (keyword_expression
+                      (identifier))
+                    (int_literal))
+                  (raise_statement))
+                (assign_statement
+                  (lvalue
+                    (var_lvalue
+                      (identifier)))
+                  (rvalue
+                    (function_call_expression
+                      (identifier))))
+                (function_call_statement
+                  (identifier)
+                  (rvalue_list
+                    (rvalue
+                      (identifier))
+                    (rvalue
+                      (identifier))
+                    (rvalue
+                      (named_tuple_expression
+                        (named_tuple_body
+                          (identifier)
+                          (rvalue)
+                          (identifier)
+                          (rvalue
+                            (identifier)))))))
+                (no_statement))))
+          (on_event_do_action_with_anon
+            (event_list
+              (event_id
+                (identifier)))
+            (anon_event_handler
+              (function_param
+                (identifier)
+                (named_tuple_type
+                  (identifier_type_list
+                    (identifier_type
+                      (identifier)
+                      (named_type
+                        (identifier)))
+                    (identifier_type
+                      (identifier)))))
+              (function_body
+                (if_statement
+                  (bin_expression
+                    (named_tuple_access_expression
+                      (identifier)
+                      (identifier))
+                    (identifier))
+                  (compound_statement
+                    (add_statement
+                      (lvalue
+                        (var_lvalue
+                          (identifier)))
+                      (rvalue
+                        (named_tuple_access_expression
+                          (identifier)
+                          (identifier)))))))))
+          (on_event_do_action_with_anon
+            (event_list
+              (event_id
+                (identifier)))
+            (anon_event_handler
+              (function_body
+                (assign_statement
+                  (lvalue
+                    (var_lvalue
+                      (identifier)))
+                  (rvalue
+                    (bin_expression
+                      (identifier)
+                      (int_literal))))))))))))
+
+================================================================================
+Spec machine with a hot state and goto with a handler
+================================================================================
+
+// From Tutorial/1_ClientServer/PSpec/BankBalanceCorrect.p
+spec GuaranteedWithDrawProgress observes eWithDrawReq, eWithDrawResp {
+  var pendingWDReqs: set[int];
+
+  start state NopendingRequests {
+    on eWithDrawReq goto PendingReqs with (req: tWithDrawReq) {
+      pendingWDReqs += (req.rId);
+    }
+  }
+
+  hot state PendingReqs {
+    on eWithDrawResp do (resp: tWithDrawResp) {
+      assert resp.rId in pendingWDReqs,
+        format ("unexpected rId: {0} received, expected one of {1}", resp.rId, pendingWDReqs);
+      pendingWDReqs -= (resp.rId);
+      if(sizeof(pendingWDReqs) == 0)
+        goto NopendingRequests;
+    }
+  }
+}
+
+---
+
+(program
+  (comment)
+  (spec_machine_declaration
+    (identifier)
+    (event_set_literal
+      (non_default_event
+        (identifier))
+      (non_default_event
+        (identifier)))
+    (machine_body
+      (machine_entry
+        (var_declaration
+          (identifier_list
+            (identifier))
+          (set_type)))
+      (machine_entry
+        (state_declaration
+          (identifier)
+          (on_event_goto_state_with_anon
+            (event_list
+              (event_id
+                (identifier)))
+            (state_name
+              (identifier))
+            (anon_event_handler
+              (function_param
+                (identifier)
+                (named_type
+                  (identifier)))
+              (function_body
+                (add_statement
+                  (lvalue
+                    (var_lvalue
+                      (identifier)))
+                  (rvalue
+                    (named_tuple_access_expression
+                      (identifier)
+                      (identifier)))))))))
+      (machine_entry
+        (state_declaration
+          (identifier)
+          (on_event_do_action_with_anon
+            (event_list
+              (event_id
+                (identifier)))
+            (anon_event_handler
+              (function_param
+                (identifier)
+                (named_type
+                  (identifier)))
+              (function_body
+                (assert_statement
+                  (bin_expression
+                    (named_tuple_access_expression
+                      (identifier)
+                      (identifier))
+                    (identifier))
+                  (string_expression
+                    (formatted_string
+                      (string_literal)
+                      (rvalue_list
+                        (rvalue
+                          (named_tuple_access_expression
+                            (identifier)
+                            (identifier)))
+                        (rvalue
+                          (identifier))))))
+                (remove_statement
+                  (lvalue
+                    (var_lvalue
+                      (identifier)))
+                  (paren_expression
+                    (named_tuple_access_expression
+                      (identifier)
+                      (identifier))))
+                (if_statement
+                  (bin_expression
+                    (keyword_expression
+                      (identifier))
+                    (int_literal))
+                  (goto_statement
+                    (state_name
+                      (identifier))))))))))))

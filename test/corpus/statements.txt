@@ -1,0 +1,299 @@
+================================================================================
+While loop with map indexing and choose
+================================================================================
+
+// From Tutorial/1_ClientServer/PTst/TestDriver.p
+fun CreateRandomInitialAccounts(numAccounts: int) : map[int, int]
+{
+  var i: int;
+  var bankBalance: map[int, int];
+  while(i < numAccounts) {
+    bankBalance[i] = choose(100) + 10;
+    i = i + 1;
+  }
+  return bankBalance;
+}
+
+---
+
+(program
+  (comment)
+  (function_declaration
+    (p_function_declaration
+      (identifier)
+      (function_param_list
+        (function_param
+          (identifier)))
+      (map_type)
+      (function_body
+        (var_declaration
+          (identifier_list
+            (identifier)))
+        (var_declaration
+          (identifier_list
+            (identifier))
+          (map_type))
+        (while_statement
+          (bin_expression
+            (identifier)
+            (identifier))
+          (compound_statement
+            (assign_statement
+              (lvalue
+                (map_or_sequence_lvalue
+                  (lvalue
+                    (var_lvalue
+                      (identifier)))
+                  (identifier)))
+              (rvalue
+                (bin_expression
+                  (choose_expression
+                    (int_literal))
+                  (int_literal))))
+            (assign_statement
+              (lvalue
+                (var_lvalue
+                  (identifier)))
+              (rvalue
+                (bin_expression
+                  (identifier)
+                  (int_literal))))))
+        (return_statement
+          (identifier))))))
+
+================================================================================
+New machines, announce with a payload, and keys
+================================================================================
+
+// From Tutorial/1_ClientServer/PTst/TestDriver.p
+fun SetupClientServerSystem(numClients: int)
+{
+  var i: int;
+  var server: BankServer;
+  var accountIds: seq[int];
+  var initAccBalance: map[int, int];
+
+  initAccBalance = CreateRandomInitialAccounts(numClients);
+  server = new BankServer(initAccBalance);
+  announce eSpec_BankBalanceIsAlwaysCorrect_Init, initAccBalance;
+  accountIds = keys(initAccBalance);
+
+  while(i < sizeof(accountIds)) {
+    new Client((serv = server, accountId = accountIds[i], balance = initAccBalance[accountIds[i]]));
+    i = i + 1;
+  }
+}
+
+---
+
+(program
+  (comment)
+  (function_declaration
+    (p_function_declaration
+      (identifier)
+      (function_param_list
+        (function_param
+          (identifier)))
+      (function_body
+        (var_declaration
+          (identifier_list
+            (identifier)))
+        (var_declaration
+          (identifier_list
+            (identifier))
+          (named_type
+            (identifier)))
+        (var_declaration
+          (identifier_list
+            (identifier))
+          (sequence_type))
+        (var_declaration
+          (identifier_list
+            (identifier))
+          (map_type))
+        (assign_statement
+          (lvalue
+            (var_lvalue
+              (identifier)))
+          (rvalue
+            (function_call_expression
+              (identifier)
+              (rvalue_list
+                (rvalue
+                  (identifier))))))
+        (assign_statement
+          (lvalue
+            (var_lvalue
+              (identifier)))
+          (rvalue
+            (ctor_expression
+              (identifier)
+              (rvalue_list
+                (rvalue
+                  (identifier))))))
+        (announce_statement
+          (identifier)
+          (rvalue_list
+            (rvalue
+              (identifier))))
+        (assign_statement
+          (lvalue
+            (var_lvalue
+              (identifier)))
+          (rvalue
+            (keyword_expression
+              (identifier))))
+        (while_statement
+          (bin_expression
+            (identifier)
+            (keyword_expression
+              (identifier)))
+          (compound_statement
+            (ctor_statement
+              (identifier)
+              (rvalue_list
+                (rvalue
+                  (named_tuple_expression
+                    (named_tuple_body
+                      (identifier)
+                      (rvalue
+                        (identifier))
+                      (identifier)
+                      (rvalue
+                        (seq_access_expression
+                          (identifier)
+                          (identifier)))
+                      (identifier)
+                      (rvalue
+                        (seq_access_expression
+                          (identifier)
+                          (seq_access_expression
+                            (identifier)
+                            (identifier)))))))))
+            (assign_statement
+              (lvalue
+                (var_lvalue
+                  (identifier)))
+              (rvalue
+                (bin_expression
+                  (identifier)
+                  (int_literal))))))))))
+
+================================================================================
+Foreach with send
+================================================================================
+
+// From Tutorial/6_Raft/PSrc/Utils.p
+fun broadcastRequest(self: Server, peers: set[Server], e: event, payload: any) {
+    var peer: Server;
+    foreach(peer in peers) {
+        if (peer != self) {
+            send peer, e, payload;
+        }
+    }
+}
+
+---
+
+(program
+  (comment)
+  (function_declaration
+    (p_function_declaration
+      (identifier)
+      (function_param_list
+        (function_param
+          (identifier)
+          (named_type
+            (identifier)))
+        (function_param
+          (identifier)
+          (set_type
+            (named_type
+              (identifier))))
+        (function_param
+          (identifier))
+        (function_param
+          (identifier)))
+      (function_body
+        (var_declaration
+          (identifier_list
+            (identifier))
+          (named_type
+            (identifier)))
+        (foreach_statement
+          (identifier)
+          (identifier)
+          (compound_statement
+            (if_statement
+              (bin_expression
+                (identifier)
+                (identifier))
+              (compound_statement
+                (send_statement
+                  (identifier)
+                  (identifier)
+                  (rvalue_list
+                    (rvalue
+                      (identifier))))))))))))
+
+================================================================================
+Default values
+================================================================================
+
+// From Tutorial/6_Raft/PSrc/Server.p
+fun Reset() {
+    nextIndex = default(map[Server, int]);
+    logs = default(seq[tServerLog]);
+    clientPutRequestQueue = default(seq[(seqNum: int, payload: tClientPutRequest)]);
+    leader = default(Server);
+}
+
+---
+
+(program
+  (comment)
+  (function_declaration
+    (p_function_declaration
+      (identifier)
+      (function_body
+        (assign_statement
+          (lvalue
+            (var_lvalue
+              (identifier)))
+          (rvalue
+            (keyword_expression
+              (map_type
+                (named_type
+                  (identifier))))))
+        (assign_statement
+          (lvalue
+            (var_lvalue
+              (identifier)))
+          (rvalue
+            (keyword_expression
+              (sequence_type
+                (named_type
+                  (identifier))))))
+        (assign_statement
+          (lvalue
+            (var_lvalue
+              (identifier)))
+          (rvalue
+            (keyword_expression
+              (sequence_type
+                (named_tuple_type
+                  (identifier_type_list
+                    (identifier_type
+                      (identifier))
+                    (identifier_type
+                      (identifier)
+                      (named_type
+                        (identifier)))))))))
+        (assign_statement
+          (lvalue
+            (var_lvalue
+              (identifier)))
+          (rvalue
+            (keyword_expression
+              (named_type
+                (identifier)))))))))

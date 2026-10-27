@@ -1,5 +1,5 @@
 LANGUAGE_NAME := tree-sitter-p
-HOMEPAGE_URL := https://github.com/bencornia/tree-sitter-p.git
+HOMEPAGE_URL := https://github.com/bencornia/tree-sitter-p
 VERSION := 0.1.0
 
 # repository

@@ -1,3 +1,7 @@
+; Names are variables unless a more specific pattern below says otherwise.
+; Later patterns take precedence.
+(identifier) @variable
+
 ; types
 ; - builtin
 ; - parameter
@@ -59,7 +63,11 @@
 (named_tuple_body (identifier) @variable.other.member)
 (named_tuple_access_expression (identifier) @variable)
 (named_tuple_access_expression field: (identifier) @variable.other.member)
-(identifier) @variable
+; Declarations look like their uses, which locals.scm colors.
+(function_param name: (identifier) @variable.parameter)
+(machine_entry
+  (var_declaration
+    (identifier_list names: (identifier) @variable.other.member)))
 
 ("this" @variable.builtin)
 

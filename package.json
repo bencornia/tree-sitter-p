@@ -5,7 +5,7 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bencornia/tree-sitter-p.git.git"
+    "url": "git+https://github.com/bencornia/tree-sitter-p.git"
   },
   "funding": "",
   "license": "MIT",

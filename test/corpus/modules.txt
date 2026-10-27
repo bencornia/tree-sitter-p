@@ -1,0 +1,99 @@
+================================================================================
+Module declarations, including an abstraction binding
+================================================================================
+
+// From Tutorial/1_ClientServer/PSrc/ClientServerModules.p
+module Client = { Client };
+module Bank = { BankServer, Database };
+module AbstractBank = { AbstractBankServer -> BankServer };
+
+---
+
+(program
+  (comment)
+  (named_module_declaration
+    (identifier)
+    (primitve_module_expression
+      (bind_expression
+        (identifier))))
+  (named_module_declaration
+    (identifier)
+    (primitve_module_expression
+      (bind_expression
+        (identifier))
+      (bind_expression
+        (identifier))))
+  (named_module_declaration
+    (identifier)
+    (primitve_module_expression
+      (bind_expression
+        (identifier)
+        (identifier)))))
+
+================================================================================
+Test declarations, including a parameterized test
+================================================================================
+
+// From Tutorial/1_ClientServer/PTst/Testscript.p
+param nClients: int;
+
+test tcSingleClient [main=TestWithSingleClient]:
+  assert BankBalanceIsAlwaysCorrect, GuaranteedWithDrawProgress in
+  (union Client, Bank, { TestWithSingleClient });
+
+test param (nClients in [2, 3, 4]) tcParameterizedMultipleClients [main=TestWithConfig]:
+  assert BankBalanceIsAlwaysCorrect, GuaranteedWithDrawProgress in
+  (union Client, Bank, { TestWithConfig });
+
+---
+
+(program
+  (comment)
+  (global_param_declaration
+    (identifier_list
+      (identifier)))
+  (test_declaration
+    (safety_test_declaration
+      (identifier)
+      (identifier)
+      (assert_module_expression
+        (identifier_list
+          (identifier)
+          (identifier))
+        (paren_module_expression
+          (union_module_expression
+            (named_module
+              (identifier))
+            (named_module
+              (identifier))
+            (primitve_module_expression
+              (bind_expression
+                (identifier))))))))
+  (test_declaration
+    (safety_test_declaration
+      (param
+        (param_body
+          (identifier)
+          (sequence_literal
+            (sequence_literal_body
+              (sequence_primitive
+                (int_literal))
+              (sequence_primitive
+                (int_literal))
+              (sequence_primitive
+                (int_literal))))))
+      (identifier)
+      (identifier)
+      (assert_module_expression
+        (identifier_list
+          (identifier)
+          (identifier))
+        (paren_module_expression
+          (union_module_expression
+            (named_module
+              (identifier))
+            (named_module
+              (identifier))
+            (primitve_module_expression
+              (bind_expression
+                (identifier)))))))))

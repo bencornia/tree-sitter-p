@@ -1,0 +1,78 @@
+================================================================================
+Events with and without payloads, and an enum
+================================================================================
+
+// From Tutorial/3_EspressoMachine/PSrc/CoffeeMakerControlPanel.p
+event eEspressoButtonPressed;
+event eCoffeeMakerError: tCoffeeMakerState;
+event eCoffeeMachineUser: machine;
+
+enum tCoffeeMakerState {
+  NotWarmedUp,
+  Ready,
+  NoBeansError,
+  NoWaterError
+}
+
+---
+
+(program
+  (comment)
+  (event_declaration
+    (identifier))
+  (event_declaration
+    (identifier)
+    (named_type
+      (identifier)))
+  (event_declaration
+    (identifier))
+  (enum_type_declaration
+    (identifier)
+    (enum_elem_list
+      (enum_elem
+        (identifier))
+      (enum_elem
+        (identifier))
+      (enum_elem
+        (identifier))
+      (enum_elem
+        (identifier)))))
+
+================================================================================
+Events with named tuple and collection payloads
+================================================================================
+
+// From Tutorial/4_FailureDetector/PSrc/FailureDetector.p
+event ePing: (fd: FailureDetector, trial: int);
+event ePong: (node: Node, trial: int);
+event eNotifyNodesDown: set[Node];
+
+---
+
+(program
+  (comment)
+  (event_declaration
+    (identifier)
+    (named_tuple_type
+      (identifier_type_list
+        (identifier_type
+          (identifier)
+          (named_type
+            (identifier)))
+        (identifier_type
+          (identifier)))))
+  (event_declaration
+    (identifier)
+    (named_tuple_type
+      (identifier_type_list
+        (identifier_type
+          (identifier)
+          (named_type
+            (identifier)))
+        (identifier_type
+          (identifier)))))
+  (event_declaration
+    (identifier)
+    (set_type
+      (named_type
+        (identifier)))))
