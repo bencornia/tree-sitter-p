@@ -124,10 +124,40 @@
     "raise"
     "ignore"
     "as"
+    "exit"
+    "sends"
+    "receives"
+    "creates"
+    "compose"
+    "implementation"
+    "refines"
+    "rename"
+    "to"
+    "hidee"
+    "hidei"
+    "using"
+    "is"
+    "pure"
+    "requires"
+    "ensures"
+    "invariant"
+    "axiom"
+    "init-condition"
+    "inflight"
+    "sent"
+    "targets"
+    "except"
+    "pairwise"
+    "prove"
+    "Lemma"
+    "Theorem"
+    "Proof"
 ] @keyword
 
 [
 	"in"
+    "forall"
+    "exists"
 ] @keyword.operator
 
 (if_statement ["if" "else"] @keyword.conditional)
@@ -135,6 +165,10 @@
 (recv_case "case" @keyword.conditional)
 (while_statement "while" @keyword.repeat)
 (foreach_statement "foreach" @keyword.repeat)
+[
+    "break"
+    "continue"
+] @keyword.repeat
 "return" @keyword.return
 
 "fun" @keyword.function
