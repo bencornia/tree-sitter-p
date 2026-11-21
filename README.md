@@ -29,10 +29,18 @@ curl -fsSL https://raw.githubusercontent.com/bencornia/ptools/main/install.sh | 
 ```
 
 That installs the tools and then runs `plsp doctor --fix`, which also
-installs the P compiler and the VS Code extension. Run `plsp doctor --fix`
-again after upgrading ptools, to rebuild the grammar at the commit plsp
-parses with. To set Helix up by hand instead, see plsp's
+installs the P compiler and sets up Neovim and VS Code. Run
+`plsp doctor --fix` again after upgrading ptools, to rebuild the grammar at
+the commit plsp parses with. To set Helix up by hand instead, see plsp's
 [README](https://github.com/bencornia/ptools/tree/main/cmd/plsp#helix).
+
+**Neovim and VS Code** don't load this grammar themselves: they highlight
+P with plsp's semantic tokens, and plsp parses with this grammar. The same
+install sets them up. For Neovim (0.11 or later), the doctor adds
+`plugin/ptools.lua` to its configuration directory, which gives `.p` files
+the `p` filetype and starts plsp for them; plsp's
+[README](https://github.com/bencornia/ptools/tree/main/cmd/plsp#neovim)
+has the setup, to put in your own configuration instead.
 
 **Go**: the binding is an ordinary module:
 
