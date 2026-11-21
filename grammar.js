@@ -747,7 +747,8 @@ export default grammar({
 
         // P requires at least one case. Allowing none keeps `receive {}`
         // from being a syntax error while the first case is typed, so
-        // editors can indent it; p-lsp reports the missing case.
+        // editors can indent it; plsp (github.com/bencornia/ptools) reports the
+        // missing case.
         receive_statement: ($) =>
             seq('receive', '{', repeat($.recv_case), '}'),
 
