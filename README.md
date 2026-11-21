@@ -21,9 +21,18 @@ generator; and prdb, the replay debugger. For editing P, start there.
 
 ## Using it
 
-**Helix**: plsp's README has the
-[setup](https://github.com/bencornia/ptools/tree/main/cmd/plsp#helix), which
-builds this grammar and installs its queries.
+**Helix**: installing ptools sets Helix up, building this grammar and
+installing its queries:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/bencornia/ptools/main/install.sh | sh
+```
+
+That installs the tools and then runs `plsp doctor --fix`, which also
+installs the P compiler and the VS Code extension. Run `plsp doctor --fix`
+again after upgrading ptools, to rebuild the grammar at the commit plsp
+parses with. To set Helix up by hand instead, see plsp's
+[README](https://github.com/bencornia/ptools/tree/main/cmd/plsp#helix).
 
 **Go**: the binding is an ordinary module:
 
